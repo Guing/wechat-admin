@@ -3,14 +3,14 @@
     <section class="form">
       <h1>登录</h1>
       <el-form :model="loginForm" :rules="rules" ref="loginForm">
-        <el-form-item>
-          <el-input v-model="loginForm.userName" placeholder="请输入帐户"></el-input>
+        <el-form-item  prop="username" >
+          <el-input v-model="loginForm.username" placeholder="请输入帐户"></el-input>
         </el-form-item>
-        <el-form-item>
-          <el-input v-model="loginForm.passWord" placeholder="请你输入密码"></el-input>
+        <el-form-item prop="password" >
+          <el-input v-model="loginForm.password" placeholder="请你输入密码"></el-input>
         </el-form-item>
         <div class="btn-box">
-          <el-button type="primary" @click="login" >登录</el-button>
+          <el-button type="primary" @click="login">登录</el-button>
           <el-button>注册</el-button>
         </div>
       </el-form>
@@ -23,16 +23,20 @@ import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class Login extends Vue {
   loginForm: object = {
-    userName: "",
-    passWord: ""
+    username: "",
+    password: ""
   };
   rules: object = {
-    userName: [{ required: true, message: "请输入帐户", trigger: "blur" }],
-    passWord: [{ required: true, message: "请你输入密码", trigger: "blur" }]
+    username: [{ required: true, message: "请输入帐户", trigger: "blur" }],
+    password: [{ required: true, message: "请你输入密码", trigger: "blur" }]
   };
-   async login(){
-       await this.$refs['loginForm'].validate();
-       
+ login() {
+   (this.$refs["loginForm"] as any).validate((valid:boolean)=>{
+      if(valid){
+          
+      }
+   })
+  
   }
 }
 </script>
