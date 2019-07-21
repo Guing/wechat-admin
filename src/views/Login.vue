@@ -3,10 +3,10 @@
     <section class="form">
       <h1>登录</h1>
       <el-form :model="loginForm" :rules="rules" ref="loginForm">
-        <el-form-item  prop="username" >
+        <el-form-item prop="username">
           <el-input v-model="loginForm.username" placeholder="请输入帐户"></el-input>
         </el-form-item>
-        <el-form-item prop="password" >
+        <el-form-item prop="password">
           <el-input v-model="loginForm.password" placeholder="请你输入密码"></el-input>
         </el-form-item>
         <div class="btn-box">
@@ -22,21 +22,25 @@
 import { Component, Vue } from "vue-property-decorator";
 @Component
 export default class Login extends Vue {
-  loginForm: object = {
+  loginForm = {
     username: "",
     password: ""
   };
-  rules: object = {
+  rules = {
     username: [{ required: true, message: "请输入帐户", trigger: "blur" }],
     password: [{ required: true, message: "请你输入密码", trigger: "blur" }]
   };
- login() {
-   (this.$refs["loginForm"] as any).validate((valid:boolean)=>{
-      if(valid){
-          
+  login() {
+    (this.$refs["loginForm"] as any).validate(async (valid: boolean) => {
+      if (valid) {
+        const {data} = await this.$api.user.login({
+          username: this.loginForm.username,
+          password: this.loginForm.password
+        });
+         this.$store.commit('SET_TOKEN',data.token);
+         this.$router.push('/');
       }
-   })
-  
+    });
   }
 }
 </script>

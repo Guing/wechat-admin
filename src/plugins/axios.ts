@@ -2,6 +2,7 @@ import Vue, { PluginObject } from 'vue';
 import axios from 'axios';
 import config from '../config/'
 import store from '../store'
+import { Message } from 'element-ui'
 
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
@@ -33,12 +34,23 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   (res) => {
     // Do something with response data
-
-    return res.status === 200 ? res.data : Promise.reject(res);
-
+    if (res.data.code === 0) {
+      return res.data;
+    } else {
+      Message({
+        type: 'error',
+        message: res.data.msg
+      });
+      return Promise.reject(res)
+    }
   },
   (err) => {
     // Do something with response error
+    console.log(err);
+    Message({
+      type: 'error',
+      message: '网络错误'
+    });
     return Promise.reject(err);
   },
 );
@@ -62,4 +74,4 @@ Plugin.install = (Vue) => {
 
 Vue.use(Plugin);
 
-export default Plugin;
+export default _axios;
