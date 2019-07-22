@@ -5,14 +5,27 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    token:''
+    token: ''
   },
   mutations: {
-    SET_TOKEN(state,data){
-       state.token = data;
+    SET_TOKEN(state, data) {
+      state.token = data;
     }
   },
   actions: {
-
+    isLogin({ commit,  state }) {
+      if (state.token) {
+        return true;
+      } else {
+      
+        const token = localStorage.getItem('token');
+        if (token) {
+          commit('SET_TOKEN', token);
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
   }
 })

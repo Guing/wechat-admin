@@ -1,28 +1,66 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from './views/Home.vue'
+import Layout from './views/Layout.vue'
+import store from './store'
 
 Vue.use(Router)
-
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/login',
       name: 'login',
-      component: () => import(/* webpackChunkName: "about" */ './views/Login.vue')
+      component: () => import('./views/Login.vue'),
+      meta:{ hidden:true }
     },
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'layout',
+      component: Layout,
+      children: [
+        {
+          path: '/',
+          name: 'home',
+          component: () => import('./views/Home.vue'),
+          meta:{ title:'首页',icon:'el-icon-s-home' ,isLogin:true }
+        },
+        {
+          path: '/friends',
+          name: 'friends',
+          component: () => import('./views/Friends.vue'),
+          meta:{ title:'好友管理',icon:'el-icon-s-custom' ,isLogin:true}
+        },
+        {
+          path: '/group',
+          name: 'Group',
+          component: () => import('./views/Group.vue'),
+          meta:{ title:'群聊管理',icon:'el-icon-s-order',isLogin:true }
+        },
+        {
+          path: '/chart',
+          name: 'chart',
+          component: () => import('./views/Chart.vue'),
+          meta:{ title:'数据分析' ,icon:'el-icon-s-data' ,isLogin:true}
+        },
+        {
+          path: '/setting',
+          name: 'setting',
+          component: () => import('./views/Setting.vue'),
+          meta:{ title:'设置',icon:'el-icon-setting',isLogin:true}
+        },
+      ]
     },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
+
+
   ]
 })
+
+router.beforeEach( async (to, from, next) => {
+   let isLogin =  await store.dispatch('isLogin');
+  if (!isLogin && to.meta.isLogin ) {
+    next({ path: '/login' });
+  } else {
+    next();
+  };
+});
+
+export default router
