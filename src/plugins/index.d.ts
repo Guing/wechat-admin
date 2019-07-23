@@ -12,7 +12,7 @@ declare module 'vue/types/vue' {
     $axios: AxiosInstance,
     $api: {
       [key: string]: {
-        [key: string]: (data: object, options?: object) => Promise<any>
+        [key: string]: (data?: object, options?: object) => Promise<any>
       }
     }
   }
