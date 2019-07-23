@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import storage from './utils/storage'
 
 Vue.use(Vuex)
 
@@ -9,7 +10,7 @@ export default new Vuex.Store({
   },
   mutations: {
     SET_TOKEN(state, data) {
-      localStorage.setItem('token', data);
+      storage.setToken(data);
       state.token = data;
     }
   },
@@ -18,7 +19,7 @@ export default new Vuex.Store({
       if (state.token) {
         return true;
       } else {
-        const token = localStorage.getItem('token');
+        const token = storage.getToken();
         if (token) {
           commit('SET_TOKEN', token);
           return true;
@@ -26,6 +27,9 @@ export default new Vuex.Store({
           return false;
         }
       }
+    },
+    logOut({ commit}){
+      commit('SET_TOKEN', "");
     }
   }
 })

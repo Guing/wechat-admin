@@ -15,10 +15,11 @@ let router = new Router({
     {
       path: '/',
       name: 'layout',
+      redirect:'/home',
       component: Layout,
       children: [
         {
-          path: '/',
+          path: '/home',
           name: 'home',
           component: () => import('./views/Home.vue'),
           meta:{ title:'首页',icon:'el-icon-s-home' ,isLogin:true }
@@ -48,9 +49,7 @@ let router = new Router({
           meta:{ title:'设置',icon:'el-icon-setting',isLogin:true}
         },
       ]
-    },
-
-
+    }
   ]
 })
 

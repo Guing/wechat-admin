@@ -8,7 +8,7 @@ export default {
     isLogin() {
         return axios.get('/wechat/isLogin');
     },
-    getFriends() {
-        return axios.get('/wechat/friends');
+    getFriends(params:object) {
+        return axios.get('/wechat/friends',{ params });
     }
 }

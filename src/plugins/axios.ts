@@ -4,6 +4,7 @@ import config from '../config/'
 import store from '../store'
 import { Message } from 'element-ui'
 
+
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
@@ -34,8 +35,12 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   (res) => {
     // Do something with response data
-    if (res.data.code === 0) {
+    const code = res.data.code;
+    if (code === 0) {
       return res.data;
+    } else if (code === '50012' || code === '10031') {
+      store.dispatch('logOut');
+      return Promise.reject(res)
     } else {
       Message({
         type: 'error',
