@@ -1,6 +1,5 @@
 
 const isProd = process.env.NODE_ENV === 'production';
 export default {
-    // baseURL: isProd?'http://wechat.blackfe.com/api':'http://localhost:7001/api'
-    baseURL: 'http://wechat.blackfe.com/api'
+    baseURL: isProd?'http://wechat.blackfe.com/api':'http://localhost:7001/api'
 }

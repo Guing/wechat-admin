@@ -10,5 +10,8 @@ export default {
     },
     getFriends(params:object) {
         return axios.get('/wechat/friends',{ params });
+    },
+    exportFriends(params:object) {
+        return axios.get('/wechat/export',{ params,responseType:'blob' });
     }
 }

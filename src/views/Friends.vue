@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="search">
+    <!-- <div class="search">
       <el-row :gutter="20">
         <el-col :span="6">
           <el-input v-model="search.name" placeholder="名字"></el-input>
@@ -42,8 +42,8 @@
           <el-button type="primary" @click="getData">搜索</el-button>
         </el-col>
       </el-row>
-    </div>
-
+    </div>-->
+    <TableFilter :data.sync="search" :config="searchConfig" @getData="getData"></TableFilter>
     <el-table :data="tableData" border style="width: 100%">
       <el-table-column label="名字" width="100px">
         <template slot-scope="scope">
@@ -69,10 +69,26 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-
-@Component({})
+import TableFilter from "../components/TableFilter.vue";
+@Component({
+  components: {
+    TableFilter
+  }
+})
 export default class Friends extends Vue {
   tableData: object[] = [];
+  searchConfig = [
+    {
+      name: "name",
+      label: "名字"
+    },
+    {
+      domType: "select",
+      name: "gender",
+      label: "性别",
+      options: [{ label: "男", value: 1 }, { label: "女", value: 2 }]
+    }
+  ];
   search: object = {
     name: "",
     alias: "",
