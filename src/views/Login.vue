@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <section class="form">
+    <section class="form" v-if="!showCode">
       <h1>登录</h1>
       <el-form :model="loginForm" :rules="rules" ref="loginForm">
         <el-form-item prop="username">
@@ -15,17 +15,27 @@
         </div>
       </el-form>
     </section>
+    <section class="form" v-else>
+      <h1>微信登录</h1>
+      <WeChatLogin :show="showCode"></WeChatLogin>
+    </section>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-@Component
+import WeChatLogin from "../components/WeChatLogin.vue";
+@Component({
+  components: {
+    WeChatLogin
+  }
+})
 export default class Login extends Vue {
   loginForm = {
     username: "",
     password: ""
   };
+  showCode: boolean = false;
   rules = {
     username: [{ required: true, message: "请输入帐户", trigger: "blur" }],
     password: [{ required: true, message: "请你输入密码", trigger: "blur" }]
@@ -33,12 +43,12 @@ export default class Login extends Vue {
   login() {
     (this.$refs["loginForm"] as any).validate(async (valid: boolean) => {
       if (valid) {
-        const {data} = await this.$api.user.login({
+        const { data } = await this.$api.user.login({
           username: this.loginForm.username,
           password: this.loginForm.password
         });
-         this.$store.commit('SET_TOKEN',data.token);
-         this.$router.push('/');
+        this.$store.commit("SET_TOKEN", `Bearer ${data.token}`);
+        this.showCode = true;
       }
     });
   }

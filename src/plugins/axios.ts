@@ -4,6 +4,7 @@ import config from '../config/'
 import store from '../store'
 import { Message } from 'element-ui'
 
+
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
@@ -11,7 +12,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 const axiosConfig = {
   baseURL: config.baseURL,
-  timeout: 10 * 1000, // Timeout
+  timeout: 20 * 1000, // Timeout
   withCredentials: true, // Check cross-site Access-Control
 };
 
@@ -34,8 +35,15 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   (res) => {
     // Do something with response data
-    if (res.data.code === 0) {
+    const code = res.data.code;
+
+    if (code === 0) {
       return res.data;
+    } else if (Object.prototype.toString.call(res.data) === '[object Blob]') {
+      return res.data;
+    } else if (code === 50012 || code === 10031) {
+      store.dispatch('logOut');
+      return Promise.reject(res)
     } else {
       Message({
         type: 'error',
@@ -46,7 +54,6 @@ _axios.interceptors.response.use(
   },
   (err) => {
     // Do something with response error
-    console.log(err);
     Message({
       type: 'error',
       message: '网络错误'
