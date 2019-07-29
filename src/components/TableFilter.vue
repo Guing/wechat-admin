@@ -50,15 +50,7 @@
 <script lang="ts">
 import { Component, Prop, Watch, Vue, Emit } from "vue-property-decorator";
 
-interface filterConfig {
-  name: string;
-  domType?: string;
-  type?: string;
-  label?: string;
-  placeholder?: string;
-  options?: object[];
-  siblings?: filterConfig[];
-}
+
 
 @Component({})
 export default class TableFilter extends Vue {
@@ -69,7 +61,7 @@ export default class TableFilter extends Vue {
   @Prop({
     required: true
   })
-  private config!: filterConfig[]; //配置dom
+  private config!: TableFilterConfig[]; //配置dom
 
   @Prop({
     default: 4
@@ -99,7 +91,7 @@ export default class TableFilter extends Vue {
     this.$emit("getData");
   }
   resetData() {
-    (this.$refs as any).tableFilter.resetFields();
+    this.$refs.tableFilter.resetFields();
     this.getData();
   }
   async exportData() {

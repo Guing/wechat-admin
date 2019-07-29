@@ -10,11 +10,6 @@ declare global {
 declare module 'vue/types/vue' {
   interface Vue {
     $axios: AxiosInstance,
-    $api: {
-      [key: string]: {
-        [key: string]: (data?: object, options?: object) => Promise<any>
-      }
-    }
   }
   interface VueConstructor {
     $axios: AxiosInstance
