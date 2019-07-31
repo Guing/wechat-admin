@@ -5,6 +5,9 @@
 </template>
 
 <style lang="scss">
+html,body{
+  height:100%;
+}
 body,h1,div{
   margin:0;
   padding:0;

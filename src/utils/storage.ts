@@ -1,14 +1,11 @@
 const TOKEN = 'token';
-interface storage {
-    [key: string]: (value?: string) => string | null
-}
 const storage = {
     setToken: (value: string): void => {
-        value === "" ? localStorage.removeItem(TOKEN)
-            : localStorage.setItem(TOKEN, value);
+        value === "" ? sessionStorage.removeItem(TOKEN)
+            : sessionStorage.setItem(TOKEN, value);
     },
     getToken: (): string | null => {
-        return localStorage.getItem(TOKEN);
+        return sessionStorage.getItem(TOKEN);
     }
 }
 export default storage

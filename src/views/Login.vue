@@ -7,7 +7,7 @@
           <el-input v-model="loginForm.username" placeholder="请输入帐户"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input v-model="loginForm.password" placeholder="请你输入密码"></el-input>
+          <el-input type="password" v-model="loginForm.password" placeholder="请你输入密码"></el-input>
         </el-form-item>
         <div class="btn-box">
           <el-button type="primary" @click="login">登录</el-button>
@@ -40,6 +40,15 @@ export default class Login extends Vue {
     username: [{ required: true, message: "请输入帐户", trigger: "blur" }],
     password: [{ required: true, message: "请你输入密码", trigger: "blur" }]
   };
+  async created(){
+    if(this.$store.state.token){
+   const result =  await this.$api.wechat.isLogin();
+    if(result.data){
+       this.$router.push('/');
+    }
+    }
+
+  }
   login() {
     (this.$refs["loginForm"] as any).validate(async (valid: boolean) => {
       if (valid) {

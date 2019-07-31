@@ -7,7 +7,10 @@
       type="primary"
       icon="el-icon-refresh"
     ></el-button>
-    <img class="code" :class="{expire:isExpire}" :src="codeUrl" :width="width" :height="height" />
+    <div class="code" :class="{expire:isExpire}"   >
+          <img  :src="codeUrl"  />
+    </div>
+
   </div>
 </template>
 
@@ -16,23 +19,12 @@ import { Component, Prop, Watch, Vue } from "vue-property-decorator";
 
 @Component({})
 export default class WeChatLogin extends Vue {
-  @Prop({
-    type: Number,
-    default: 200
-  })
-  private width!: number;
-
-  @Prop({
-    type: Number,
-    default: 200
-  })
-  private height!: number;
 
   @Prop({
     type: Boolean
   })
   show!: boolean;
-
+   expireTime:number = 60*1000;
   codeUrl: string = "";
 
   loading: boolean = false;
@@ -42,7 +34,9 @@ export default class WeChatLogin extends Vue {
   async onShowChanged(val: string, oldVal: string) {
     console.log(val);
     if (val) {
-      await this.isLogin(false);
+      await this.isLogin(false).catch(()=>{
+         this.isExpire = true;
+      });
       this.getCode();
     }
   }
@@ -58,8 +52,9 @@ export default class WeChatLogin extends Vue {
     this.codeUrl = result.data;
     setTimeout(() => {
       this.isExpire = true;
-    }, 60000);
+    }, this.expireTime);
     this.loading = false;
+     this.isExpire = false;
   }
   async isLogin(isRepeat: boolean = true) {
     const result = await this.$api.wechat.isLogin();
@@ -91,12 +86,18 @@ export default class WeChatLogin extends Vue {
   position: relative;
   display: block;
   margin: 0 auto;
+  width:200px;
+  height:200px;
+  img{
+    width:100%;
+    height: 100%;
+  }
   &.expire::after {
     position: absolute;
     content: "";
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.8);
     top: 0;
     left: 0;
   }

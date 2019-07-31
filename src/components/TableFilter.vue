@@ -49,17 +49,7 @@
 
 <script lang="ts">
 import { Component, Prop, Watch, Vue, Emit } from "vue-property-decorator";
-
-interface filterConfig {
-  name: string;
-  domType?: string;
-  type?: string;
-  label?: string;
-  placeholder?: string;
-  options?: object[];
-  siblings?: filterConfig[];
-}
-
+import {Form as ElForm} from 'element-ui'
 @Component({})
 export default class TableFilter extends Vue {
   @Prop({
@@ -99,7 +89,7 @@ export default class TableFilter extends Vue {
     this.$emit("getData");
   }
   resetData() {
-    (this.$refs as any).tableFilter.resetFields();
+    (this.$refs.tableFilter as ElForm).resetFields();
     this.getData();
   }
   async exportData() {

@@ -6,15 +6,17 @@ declare global {
     axios: AxiosInstance
   }
 }
-
+declare module 'axios' {
+  interface AxiosRequestConfig {
+    retry?: number
+    enableRetry?: boolean,
+    retryDelay?:number,
+    loading?:boolean
+  }
+}
 declare module 'vue/types/vue' {
   interface Vue {
     $axios: AxiosInstance,
-    $api: {
-      [key: string]: {
-        [key: string]: (data?: object, options?: object) => Promise<any>
-      }
-    }
   }
   interface VueConstructor {
     $axios: AxiosInstance

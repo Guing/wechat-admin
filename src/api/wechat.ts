@@ -3,15 +3,15 @@ import axios from '../plugins/axios'
 
 export default {
     getCode() {
-        return axios.get('/wechat/login');
+        return axios.get('/wechat/login', { enableRetry: true });
     },
     isLogin() {
         return axios.get('/wechat/isLogin');
     },
-    getFriends(params:object) {
-        return axios.get('/wechat/friends',{ params });
+    getFriends(params: object) {
+        return axios.get('/wechat/friends', { params });
     },
-    exportFriends(params:object) {
-        return axios.get('/wechat/export',{ params,responseType:'blob' });
+    exportFriends(params: object) {
+        return axios.get('/wechat/export', { params, responseType: 'blob' });
     }
 }

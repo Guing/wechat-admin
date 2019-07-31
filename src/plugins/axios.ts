@@ -2,7 +2,8 @@ import Vue, { PluginObject } from 'vue';
 import axios from 'axios';
 import config from '../config/'
 import store from '../store'
-import { Message } from 'element-ui'
+import { Message, Loading } from 'element-ui'
+import { ElLoadingComponent } from 'element-ui/types/loading';
 
 
 // Full config:  https://github.com/axios/axios#request-config
@@ -10,19 +11,46 @@ import { Message } from 'element-ui'
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
-const axiosConfig = {
-  baseURL: config.baseURL,
-  timeout: 20 * 1000, // Timeout
-  withCredentials: true, // Check cross-site Access-Control
-};
 
-const _axios = axios.create(axiosConfig);
+
+
+let loading: ElLoadingComponent;
+let needLoadingRequestCount: number = 0;
+let startLoading = () => {
+  if (needLoadingRequestCount === 0) {
+    loading = Loading.service({
+      lock: true,
+      background: 'rgba(0,0,0,0.1)',
+      text: '加载中...'
+    });
+  }
+  needLoadingRequestCount++
+}
+let endLoading = () => {
+  if (needLoadingRequestCount <= 0) return
+  needLoadingRequestCount--
+  if (needLoadingRequestCount === 0) {
+    loading.close()
+  }
+
+}
+
+const _axios = axios.create({
+  baseURL: config.baseURL,
+  timeout: 6 * 1000, // Timeout
+  retry: 4,
+  enableRetry: false,
+  loading: false,
+  retryDelay: 1000,
+  withCredentials: true, // Check cross-site Access-Control
+});
 
 _axios.interceptors.request.use(
   (cfg) => {
     // Do something before request is sent
     const token = store.state.token;
     token && (cfg.headers.Authorization = token)
+    cfg.loading && startLoading();
     return cfg;
   },
   (err) => {
@@ -35,8 +63,8 @@ _axios.interceptors.request.use(
 _axios.interceptors.response.use(
   (res) => {
     // Do something with response data
+    res.config.loading && endLoading();
     const code = res.data.code;
-
     if (code === 0) {
       return res.data;
     } else if (Object.prototype.toString.call(res.data) === '[object Blob]') {
@@ -53,12 +81,27 @@ _axios.interceptors.response.use(
     }
   },
   (err) => {
-    // Do something with response error
-    Message({
-      type: 'error',
-      message: '网络错误'
+    //网络请求失败重新尝试
+    let config = err.config;
+    config.__retryCount = config.__retryCount || 0;
+    if (!config.enableRetry || !config || !config.retry || config.__retryCount >= config.retry) {
+      config.loading && endLoading();
+      Message({
+        type: 'error',
+        message: '网络错误'
+      });
+      return Promise.reject(err);
+    }
+    config.__retryCount += 1;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, config.retryDelay || 1);
+    }).then(() => {
+      return _axios(config);
     });
-    return Promise.reject(err);
+
+
   },
 );
 

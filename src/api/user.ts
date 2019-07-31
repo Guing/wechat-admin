@@ -2,7 +2,10 @@
 import axios from '../plugins/axios'
 
 export default {
-    login(parmas: object) {
-        return axios.post('/user/access/login', parmas);
+    login(data: object) {
+        return axios.post('/user/access/login', data, { loading: true });
+    },
+    loginOut(data: object = {}) {
+        return axios.post('/user/access/logout', data, { loading: true });
     }
 }
