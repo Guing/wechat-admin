@@ -59,7 +59,7 @@ export default class TableFilter extends Vue {
   @Prop({
     required: true
   })
-  private config!: filterConfig[]; //配置dom
+  private config!: TableFilterConfig[]; //配置dom
 
   @Prop({
     default: 4

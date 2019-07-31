@@ -10,14 +10,14 @@ declare module 'vue/types/vue' {
 }
 
 declare global {
-    interface filterConfig {
+    interface TableFilterConfig {
         name: string;
         domType?: string;
         type?: string;
         label?: string;
         placeholder?: string;
         options?: object[];
-        siblings?: filterConfig[];
+        siblings?: TableFilterConfig[];
     }
 }
 
