@@ -69,8 +69,11 @@ _axios.interceptors.response.use(
       return res.data;
     } else if (Object.prototype.toString.call(res.data) === '[object Blob]') {
       return res.data;
-    } else if (code === 50012 || code === 10031) {
+    } else if (code === 50012 ) {
       store.dispatch('logOut');
+      return Promise.reject(res)
+    } else if (code === 10051 ) {
+      store.dispatch('logOutWechat');
       return Promise.reject(res)
     } else {
       Message({

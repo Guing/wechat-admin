@@ -1,7 +1,7 @@
 <template>
   <div class="main">
-    <TableFilter :data.sync="search" :config="searchConfig" @getData="getData"></TableFilter>
-    <el-table :data="tableData" border style="width: 100%">
+    <TableFilter :data.sync="search" :config="searchConfig" @getData="seachData"></TableFilter>
+    <el-table :data="tableData" border style="width: 100%" >
       <el-table-column label="名字" width="100px">
         <template slot-scope="scope">
           <span v-html=" scope.row.name "></span>
@@ -14,12 +14,12 @@
       </el-table-column>
       <el-table-column prop="gender" label="性别" width="100px"></el-table-column>
       <el-table-column prop="star" label="星标" width="100px"></el-table-column>
-      <el-table-column prop="朋友" label="朋友" width="100px"></el-table-column>
-      <el-table-column prop="friend" label="城市" width="100px"></el-table-column>
+      <el-table-column prop="friend" label="朋友" width="100px"></el-table-column>
       <el-table-column prop="province" label="省份" width="100px"></el-table-column>
       <el-table-column prop="type" label="类型" width="100px"></el-table-column>
       <el-table-column prop="signature" label="描述"></el-table-column>
     </el-table>
+    <TablePaging :data.sync="search" @getData="getData"></TablePaging>
   </div>
 </template>
 
@@ -27,9 +27,11 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import TableFilter from "../components/TableFilter.vue";
+import TablePaging from "../components/TablePaging.vue";
 @Component({
   components: {
-    TableFilter
+    TableFilter,
+    TablePaging
   }
 })
 export default class Friends extends Vue {
@@ -46,7 +48,7 @@ export default class Friends extends Vue {
     {
       domType: "select",
       name: "friend",
-      label: "是否朋友",
+      label: "朋友",
       options: [{ label: "是", value: 1 }, { label: "否", value: 2 }]
     },
     {
@@ -74,7 +76,10 @@ export default class Friends extends Vue {
       label: "城市"
     }
   ];
-  search: object = {
+  search = {
+    pageSize: 10,
+    pageIndex: 1,
+    pageCount: 10,
     name: "",
     alias: "",
     friend: "",
@@ -88,7 +93,15 @@ export default class Friends extends Vue {
   }
   async getData() {
     let result = await this.$api.wechat.getFriends(this.search);
-    this.tableData = result.data;
+    this.tableData = result.data.list;
+    this.search.pageCount = result.data.pageCount;
+  }
+  seachData() {
+    this.search.pageIndex = 1;
+    this.getData();
+  }
+  deleteRow(){
+
   }
 }
 </script>

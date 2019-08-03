@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 import './registerServiceWorker'
 import './plugins/element'
+import './plugins/v-charts'
 import api from './api'
 
 Vue.config.productionTip = false

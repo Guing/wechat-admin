@@ -18,6 +18,9 @@
     <section class="form" v-else>
       <h1>微信登录</h1>
       <WeChatLogin :show="showCode"></WeChatLogin>
+      <div class="btn-box">
+        <el-button type="primary" @click="loginOther">登录其他账号</el-button>
+      </div>
     </section>
   </div>
 </template>
@@ -40,14 +43,14 @@ export default class Login extends Vue {
     username: [{ required: true, message: "请输入帐户", trigger: "blur" }],
     password: [{ required: true, message: "请你输入密码", trigger: "blur" }]
   };
-  async created(){
-    if(this.$store.state.token){
-   const result =  await this.$api.wechat.isLogin();
-    if(result.data){
-       this.$router.push('/');
+  async created() {
+    if (this.$store.state.token) {
+      this.showCode = true;
+      const result = await this.$api.wechat.checkLogin();
+      if (result.data) {
+        this.$router.push("/");
+      }
     }
-    }
-
   }
   login() {
     (this.$refs["loginForm"] as any).validate(async (valid: boolean) => {
@@ -60,6 +63,10 @@ export default class Login extends Vue {
         this.showCode = true;
       }
     });
+  }
+  loginOther(){
+     this.$store.dispatch('logOut');
+     this.showCode = false;
   }
 }
 </script>
@@ -80,6 +87,9 @@ export default class Login extends Vue {
   box-shadow: 0 0 25px #cac6c6;
   padding: 20px;
   text-align: center;
+}
+.btn-box{
+  margin-top:10px;
 }
 h1 {
   margin-bottom: 10px;

@@ -2,14 +2,23 @@
 import axios from '../plugins/axios'
 
 export default {
-    getCode() {
-        return axios.get('/wechat/login', { enableRetry: true });
+    start() {
+        return axios.get('/wechat/start');
     },
-    isLogin() {
-        return axios.get('/wechat/isLogin');
+    getCode() {
+        return axios.get('/wechat/getCode', { enableRetry: true });
+    },
+    chart() {
+        return axios.get('/wechat/chart',{ loading: true });
+    },
+    checkLogin() {
+        return axios.get('/wechat/checkLogin');
     },
     getFriends(params: object) {
         return axios.get('/wechat/friends', { params });
+    },
+    getRooms(params: object) {
+        return axios.get('/wechat/rooms', { params });
     },
     exportFriends(params: object) {
         return axios.get('/wechat/export', { params, responseType: 'blob' });

@@ -32,40 +32,50 @@ export default class WeChatLogin extends Vue {
 
   @Watch("show", { immediate: true, deep: true })
   async onShowChanged(val: string, oldVal: string) {
-    console.log(val);
     if (val) {
-      await this.isLogin(false).catch(()=>{
-         this.isExpire = true;
-      });
-      this.getCode();
+       let  data  =  await this.checkLogin(false);
+       if(!data){
+         await this.$api.wechat.start().catch(()=>{});
+         this.getCode();
+       }
+       
     }
   }
   @Watch("codeUrl", { immediate: true, deep: true })
   onCodeUrlChanged(val: string, oldVal: string) {
     if (val != "") {
-      this.isLogin();
+      this.checkLogin();
     }
   }
   async getCode() {
     this.loading = true;
-    const result = await this.$api.wechat.getCode();
-    this.codeUrl = result.data;
-    setTimeout(() => {
+    const { data } = await this.$api.wechat.getCode();
+    if( data === true ){
+       return this.$router.push('/');
+    }else if( data === "" ){
+       setTimeout(()=>{
+          this.getCode()
+       },1000);
+       return;
+    }
+    this.codeUrl = data;
+    this.loading = false;
+    this.isExpire = false;
+     setTimeout(() => {
       this.isExpire = true;
     }, this.expireTime);
-    this.loading = false;
-     this.isExpire = false;
   }
-  async isLogin(isRepeat: boolean = true) {
-    const result = await this.$api.wechat.isLogin();
-    if (!result.data) {
+  async checkLogin(isRepeat: boolean = true) {
+    const { data } = await this.$api.wechat.checkLogin();
+    if (!data) {
       isRepeat &&
         setTimeout(async () => {
-          this.isLogin();
+          this.checkLogin();
         }, 2000);
     } else {
       this.$router.push("/");
     }
+    return data;
   }
 }
 </script>

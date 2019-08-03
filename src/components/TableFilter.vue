@@ -41,7 +41,7 @@
       <div class="btn-box">
         <el-button type="primary" @click="getData">搜索</el-button>
         <el-button type="primary" @click="resetData">重置</el-button>
-        <el-button type="primary" @click="exportData">导出</el-button>
+        <el-button type="primary" v-if="showExport" @click="exportData">导出</el-button>
       </div>
     </el-form>
   </div>
@@ -65,6 +65,10 @@ export default class TableFilter extends Vue {
     default: 4
   })
   private showNum!: number; //最大显示数
+   @Prop({
+    default: true
+  })
+  private showExport!: boolean; //显示导出
 
   myConfig = this.config.map(item => {
     !item.domType && (item.domType = "input");
