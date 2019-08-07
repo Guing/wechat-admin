@@ -11,14 +11,17 @@ export default {
     chart() {
         return axios.get('/wechat/chart',{ loading: true });
     },
+    startAi() {
+        return axios.get('/wechat/message/ai',{ loading: true });
+    },
     checkLogin() {
         return axios.get('/wechat/checkLogin');
     },
     getFriends(params: object) {
-        return axios.get('/wechat/friends', { params });
+        return axios.get('/wechat/friends', { params,loading: true });
     },
     getRooms(params: object) {
-        return axios.get('/wechat/rooms', { params });
+        return axios.get('/wechat/rooms', { params,loading: true });
     },
     exportFriends(params: object) {
         return axios.get('/wechat/export', { params, responseType: 'blob' });

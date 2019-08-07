@@ -36,12 +36,12 @@ let router = new Router({
           component: () => import('./views/Group.vue'),
           meta: { title: '群聊管理', icon: 'el-icon-s-order', isLogin: true }
         },
-        {
-          path: '/chart',
-          name: 'chart',
-          component: () => import('./views/Chart.vue'),
-          meta: { title: '数据分析', icon: 'el-icon-s-data', isLogin: true }
-        },
+        // {
+        //   path: '/chart',
+        //   name: 'chart',
+        //   component: () => import('./views/Chart.vue'),
+        //   meta: { title: '数据分析', icon: 'el-icon-s-data', isLogin: true }
+        // },
         {
           path: '/setting',
           name: 'setting',

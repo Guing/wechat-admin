@@ -12,11 +12,11 @@
           <span v-html=" scope.row.payload.memberIdList.length "></span>
         </template>
       </el-table-column>
-     <el-table-column  label="操作" >
+     <!-- <el-table-column  label="操作" >
         <template slot-scope="scope">
              <el-button @click="viewMember(scope.row.payload.topic)" >查看群员 </el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
   </div>
 </template>

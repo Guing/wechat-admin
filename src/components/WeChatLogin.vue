@@ -66,7 +66,7 @@ export default class WeChatLogin extends Vue {
     }, this.expireTime);
   }
   async checkLogin(isRepeat: boolean = true) {
-    const { data } = await this.$api.wechat.checkLogin();
+    const { data } = await this.$api.wechat.checkLogin()
     if (!data) {
       isRepeat &&
         setTimeout(async () => {

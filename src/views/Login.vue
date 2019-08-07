@@ -11,7 +11,7 @@
         </el-form-item>
         <div class="btn-box">
           <el-button type="primary" @click="login">登录</el-button>
-          <el-button>注册</el-button>
+          <!-- <el-button>注册</el-button> -->
         </div>
       </el-form>
     </section>

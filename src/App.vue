@@ -8,7 +8,7 @@
 html,body{
   height:100%;
 }
-body,h1,div{
+body,h1,div,p,h2,h4,h3{
   margin:0;
   padding:0;
 }

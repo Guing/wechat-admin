@@ -2,7 +2,7 @@ import Vue, { PluginObject } from 'vue';
 import axios from 'axios';
 import config from '../config/'
 import store from '../store'
-import { Message, Loading } from 'element-ui'
+import { Message, Loading ,MessageBox } from 'element-ui'
 import { ElLoadingComponent } from 'element-ui/types/loading';
 
 
@@ -74,6 +74,13 @@ _axios.interceptors.response.use(
       return Promise.reject(res)
     } else if (code === 10051 ) {
       store.dispatch('logOutWechat');
+      return Promise.reject(res)
+    } else if (code === 10053 ) {
+      MessageBox({
+        title:'提示',
+        type: 'error',
+        message: res.data.msg
+      });
       return Promise.reject(res)
     } else {
       Message({
